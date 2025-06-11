@@ -1,0 +1,274 @@
+@page "/relatorios"
+@using GerenciamentoHoras.Models
+@using GerenciamentoHoras.Services
+@inject IRegistroHorasService RegistroService
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
+
+<PageTitle>Relatórios - Gerenciamento de Horas</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Relatórios de Horas</h1>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Filtros</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="filtroMatricula" class="form-label">Matrícula</label>
+                            <input id="filtroMatricula" class="form-control" @bind="filtroMatricula" placeholder="Digite a matrícula" />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtroProjeto" class="form-label">EXT</label>
+                            <input id="filtroProjeto" class="form-control" @bind="filtroProjeto" placeholder="Digite o projeto" />
+                        </div>
+                        <div class="col-md-2">
+                            <label for="filtroTipo" class="form-label">Tipo</label>
+                            <select id="filtroTipo" class="form-select" @bind="filtroTipo">
+                                <option value="">Todos</option>
+                                @foreach (var tipo in Enum.GetValues<TipoRegistro>())
+                                {
+                                    <option value="@((int)tipo)">@GetDisplayName(tipo)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="dataInicio" class="form-label">Data Início</label>
+                            <input id="dataInicio" type="date" class="form-control" @bind="dataInicio" />
+                        </div>
+                        <div class="col-md-2">
+                            <label for="dataFim" class="form-label">Data Fim</label>
+                            <input id="dataFim" type="date" class="form-control" @bind="dataFim" />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button class="btn btn-primary me-2" @onclick="AplicarFiltros">
+                                <i class="bi bi-search"></i> Aplicar Filtros
+                            </button>
+                            <button class="btn btn-secondary me-2" @onclick="LimparFiltros">
+                                <i class="bi bi-x-circle"></i> Limpar Filtros
+                            </button>
+                            <button class="btn btn-success" @onclick="ExportarRelatorio">
+                                <i class="bi bi-download"></i> Exportar Relatório
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumo por Tipo -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Resumo por Tipo</h5>
+                </div>
+                <div class="card-body">
+                    @if (totalHorasPorTipo != null)
+                    {
+                        <div class="row">
+                            @foreach (var item in totalHorasPorTipo)
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card border-0 @GetCardClass(item.Key)">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title text-white">@GetDisplayName(item.Key)</h5>
+                                            <h2 class="card-text text-white">@item.Value.ToString("F1")h</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card bg-dark">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title text-white">Total Geral</h5>
+                                        <h2 class="card-text text-white">@totalHorasPorTipo.Values.Sum().ToString("F1")h</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de Registros -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Registros Filtrados (@(registrosFiltrados?.Count() ?? 0) registros)</h5>
+                </div>
+                <div class="card-body">
+                    @if (registrosFiltrados == null)
+                    {
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                        </div>
+                    }
+                    else if (!registrosFiltrados.Any())
+                    {
+                        <div class="alert alert-info">
+                            Nenhum registro encontrado com os filtros aplicados.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Matrícula</th>
+                                        <th>EXT</th>
+                                        <th>Data</th>
+                                        <th>Horas</th>
+                                        <th>Tipo</th>
+                                        <th>Data Criação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var registro in registrosFiltrados)
+                                    {
+                                        <tr>
+                                            <td>@registro.Matricula</td>
+                                            <td>@registro.EXT</td>
+                                            <td>@registro.Data.ToString("dd/MM/yyyy")</td>
+                                            <td>@registro.QuantidadeHoras.ToString("F1")</td>
+                                            <td>
+                                                <span class="badge @GetBadgeClass(registro.Tipo)">
+                                                    @GetDisplayName(registro.Tipo)
+                                                </span>
+                                            </td>
+                                            <td>@registro.DataCriacao.ToString("dd/MM/yyyy HH:mm")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<RegistroHoras>? registrosFiltrados;
+    private Dictionary<TipoRegistro, decimal>? totalHorasPorTipo;
+
+    // Filtros
+    private string? filtroMatricula;
+    private string? filtroProjeto;
+    private string? filtroTipo;
+    private DateTime? dataInicio;
+    private DateTime? dataFim;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarDados();
+    }
+
+    private async Task CarregarDados()
+    {
+        var matricula = string.IsNullOrWhiteSpace(filtroMatricula) ? null : filtroMatricula;
+        var projeto = string.IsNullOrWhiteSpace(filtroProjeto) ? null : filtroProjeto;
+        TipoRegistro? tipo = null;
+        
+        if (!string.IsNullOrWhiteSpace(filtroTipo) && int.TryParse(filtroTipo, out int tipoInt))
+        {
+            tipo = (TipoRegistro)tipoInt;
+        }
+
+        registrosFiltrados = await RegistroService.GetRelatorioAsync(matricula, projeto, tipo, dataInicio, dataFim);
+        totalHorasPorTipo = await RegistroService.GetTotalHorasPorTipoAsync(matricula, projeto, dataInicio, dataFim);
+    }
+
+    private async Task AplicarFiltros()
+    {
+        await CarregarDados();
+        StateHasChanged();
+    }
+
+    private async Task LimparFiltros()
+    {
+        filtroMatricula = null;
+        filtroProjeto = null;
+        filtroTipo = null;
+        dataInicio = null;
+        dataFim = null;
+        await CarregarDados();
+        StateHasChanged();
+    }
+
+    private async Task ExportarRelatorio()
+    {
+        try
+        {
+            var filtro = new
+            {
+                Matricula = string.IsNullOrWhiteSpace(filtroMatricula) ? null : filtroMatricula,
+                Projeto = string.IsNullOrWhiteSpace(filtroProjeto) ? null : filtroProjeto,
+                Tipo = string.IsNullOrWhiteSpace(filtroTipo) ? (int?)null : int.Parse(filtroTipo),
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
+
+            await JSRuntime.InvokeVoidAsync("downloadFileWithData", "/api/exportacao/relatorio", filtro);
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Erro ao exportar relatório: {ex.Message}");
+        }
+    }
+
+    private string GetDisplayName(TipoRegistro tipo)
+    {
+        return tipo switch
+        {
+            TipoRegistro.Normal => "Normal",
+            TipoRegistro.Atestado => "Atestado",
+            TipoRegistro.Ferias => "Férias",
+            _ => tipo.ToString()
+        };
+    }
+
+    private string GetBadgeClass(TipoRegistro tipo)
+    {
+        return tipo switch
+        {
+            TipoRegistro.Normal => "bg-success",
+            TipoRegistro.Atestado => "bg-warning",
+            TipoRegistro.Ferias => "bg-info",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetCardClass(TipoRegistro tipo)
+    {
+        return tipo switch
+        {
+            TipoRegistro.Normal => "bg-success",
+            TipoRegistro.Atestado => "bg-warning",
+            TipoRegistro.Ferias => "bg-info",
+            _ => "bg-secondary"
+        };
+    }
+}
+

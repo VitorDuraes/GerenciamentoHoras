@@ -1,0 +1,86 @@
+﻿@page "/"
+
+<PageTitle>Sistema de Gerenciamento de Horas</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+                <h1 class="display-4">Sistema de Gerenciamento de Horas</h1>
+                <p class="lead">Controle e gerencie as horas trabalhadas de forma simples e eficiente.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-clock text-primary"></i> Registros de Horas
+                    </h5>
+                    <p class="card-text">
+                        Registre as horas trabalhadas informando matrícula, projeto, data, quantidade de horas e tipo (Normal, Atestado ou Férias).
+                    </p>
+                    <a href="/registros" class="btn btn-primary">Acessar Registros</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-graph-up text-success"></i> Relatórios
+                    </h5>
+                    <p class="card-text">
+                        Visualize relatórios detalhados com filtros por colaborador, projeto, tipo e período. Veja totais de horas por categoria.
+                    </p>
+                    <a href="/relatorios" class="btn btn-success">Ver Relatórios</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Funcionalidades do Sistema</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6><i class="bi bi-plus-circle text-primary"></i> Inserção de Dados</h6>
+                            <ul>
+                                <li>Matrícula do colaborador</li>
+                                <li>Nome do EXT</li>
+                                <li>Data do trabalho</li>
+                                <li>Quantidade de horas</li>
+                                <li>Tipo (Normal, Atestado, Férias)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="bi bi-table text-success"></i> Visualização</h6>
+                            <ul>
+                                <li>Tabela com todos os registros</li>
+                                <li>Edição e exclusão de registros</li>
+                                <li>Filtros avançados</li>
+                                <li>Ordenação por data</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="bi bi-download text-info"></i> Exportação</h6>
+                            <ul>
+                                <li>Download de planilhas</li>
+                                <li>Relatórios por período</li>
+                                <li>Totais por categoria</li>
+                                <li>Dados filtrados</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
