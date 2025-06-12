@@ -48,6 +48,7 @@ namespace GerenciamentoHoras.Controllers
 
                 var registros = await _registroService.GetRelatorioAsync(
                     filtro.Matricula,
+                    filtro.Nome,
                     filtro.Projeto,
                     tipo,
                     filtro.DataInicio,
@@ -55,6 +56,7 @@ namespace GerenciamentoHoras.Controllers
 
                 var totalPorTipo = await _registroService.GetTotalHorasPorTipoAsync(
                     filtro.Matricula,
+                    filtro.Nome,
                     filtro.Projeto,
                     filtro.DataInicio,
                     filtro.DataFim);

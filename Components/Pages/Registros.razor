@@ -30,6 +30,11 @@
                             <InputText id="matricula" class="form-control" @bind-Value="novoRegistro.Matricula" />
                             <ValidationMessage For="@(() => novoRegistro.Matricula)" class="text-danger" />
                         </div>
+                         <div class="mb-3">
+                            <label for="nome" class="form-label">Nome Profissional</label>
+                            <InputText id="nome" class="form-control" @bind-Value="novoRegistro.Nome" />
+                            <ValidationMessage For="@(() => novoRegistro.Nome)" class="text-danger" />
+                        </div>
 
                         <div class="mb-3">
                             <label for="EXT" class="form-label">EXT</label>
@@ -108,6 +113,7 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Matrícula</th>
+                                        <th>Nome Profissional</th>
                                         <th>EXT</th>
                                         <th>Data</th>
                                         <th>Horas</th>
@@ -120,6 +126,7 @@
                                     {
                                         <tr>
                                             <td>@registro.Matricula</td>
+                                            <td>@registro.Nome</td>
                                             <td>@registro.EXT</td>
                                             <td>@registro.Data.ToString("dd/MM/yyyy")</td>
                                             <td>@registro.QuantidadeHoras.ToString("F1")</td>
@@ -194,6 +201,7 @@
         novoRegistro = new RegistroHoras
         {
             Matricula = registro.Matricula,
+            Nome = registro.Nome,
             EXT = registro.EXT,
             Data = registro.Data,
             QuantidadeHoras = registro.QuantidadeHoras,

@@ -33,6 +33,17 @@ namespace GerenciamentoHoras.Services
             await _context.SaveChangesAsync();
             return registro;
         }
+        public async Task<RegistroHoras> CreateNameAsync(RegistroHoras registroHoras)
+        {
+            var registro = new RegistroHoras
+            {
+                Nome = registroHoras.Nome,
+                DataCriacao = DateTime.Now
+            };
+            _context.RegistrosHoras.Add(registro);
+            await _context.SaveChangesAsync();
+            return registro;
+        }
 
         public async Task<RegistroHoras> UpdateAsync(RegistroHoras registro)
         {
@@ -94,12 +105,15 @@ namespace GerenciamentoHoras.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<RegistroHoras>> GetRelatorioAsync(string? matricula = null, string? projeto = null, TipoRegistro? tipo = null, DateTime? dataInicio = null, DateTime? dataFim = null)
+        public async Task<IEnumerable<RegistroHoras>> GetRelatorioAsync(string? matricula = null, string? nome = null, string? projeto = null, TipoRegistro? tipo = null, DateTime? dataInicio = null, DateTime? dataFim = null)
         {
             var query = _context.RegistrosHoras.AsQueryable();
 
             if (!string.IsNullOrEmpty(matricula))
                 query = query.Where(r => r.Matricula == matricula);
+
+            if (!string.IsNullOrEmpty(nome))
+                query = query.Where(r => r.Nome == nome);
 
             if (!string.IsNullOrEmpty(projeto))
                 query = query.Where(r => r.EXT == projeto);
@@ -119,12 +133,15 @@ namespace GerenciamentoHoras.Services
                 .ToListAsync();
         }
 
-        public async Task<Dictionary<TipoRegistro, decimal>> GetTotalHorasPorTipoAsync(string? matricula = null, string? projeto = null, DateTime? dataInicio = null, DateTime? dataFim = null)
+        public async Task<Dictionary<TipoRegistro, decimal>> GetTotalHorasPorTipoAsync(string? matricula = null, string? nome = null, string? projeto = null, DateTime? dataInicio = null, DateTime? dataFim = null)
         {
             var query = _context.RegistrosHoras.AsQueryable();
 
             if (!string.IsNullOrEmpty(matricula))
                 query = query.Where(r => r.Matricula == matricula);
+
+            if (!string.IsNullOrEmpty(nome))
+                query = query.Where(r => r.Nome == nome);
 
             if (!string.IsNullOrEmpty(projeto))
                 query = query.Where(r => r.EXT == projeto);
@@ -156,6 +173,8 @@ namespace GerenciamentoHoras.Services
 
             return dictionary;
         }
+
+
     }
 }
 

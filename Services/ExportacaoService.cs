@@ -12,7 +12,7 @@ namespace GerenciamentoHoras.Services
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Registros de Horas");
 
-            var cabecalhos = new[] { "ID", "Matrícula", "EXT", "Data", "Quantidade de Horas", "Tipo", "Data de Criação" };
+            var cabecalhos = new[] { "ID", "Nome", "Matricula", "EXT", "Data", "Quantidade de Horas", "Tipo", "Data de Criação" };
             for (int i = 0; i < cabecalhos.Length; i++)
             {
                 worksheet.Cell(1, i + 1).Value = cabecalhos[i];
@@ -24,12 +24,13 @@ namespace GerenciamentoHoras.Services
             foreach (var registro in registros)
             {
                 worksheet.Cell(row, 1).Value = registro.Id;
-                worksheet.Cell(row, 2).Value = registro.Matricula;
-                worksheet.Cell(row, 3).Value = registro.EXT;
-                worksheet.Cell(row, 4).Value = registro.Data.ToString("dd/MM/yyyy");
-                worksheet.Cell(row, 5).Value = registro.QuantidadeHoras;
-                worksheet.Cell(row, 6).Value = GetDisplayName(registro.Tipo);
-                worksheet.Cell(row, 7).Value = registro.DataCriacao.ToString("dd/MM/yyyy HH:mm");
+                worksheet.Cell(row, 2).Value = registro.Nome?.ToString() ?? "";
+                worksheet.Cell(row, 3).Value = registro.Matricula;
+                worksheet.Cell(row, 4).Value = registro.EXT;
+                worksheet.Cell(row, 5).Value = registro.Data.ToString("dd/MM/yyyy");
+                worksheet.Cell(row, 6).Value = registro.QuantidadeHoras;
+                worksheet.Cell(row, 7).Value = GetDisplayName(registro.Tipo);
+                worksheet.Cell(row, 8).Value = registro.DataCriacao.ToString("dd/MM/yyyy HH:mm");
                 row++;
             }
 
@@ -73,7 +74,7 @@ namespace GerenciamentoHoras.Services
 
             var detalhesSheet = workbook.Worksheets.Add("Detalhes");
 
-            var cabecalhos = new[] { "ID", "Matrícula", "Projeto", "Data", "Quantidade de Horas", "Tipo", "Data de Criação" };
+            var cabecalhos = new[] { "ID", "Matrícula", "Nome", "Projeto", "Data", "Quantidade de Horas", "Tipo", "Data de Criação" };
             for (int i = 0; i < cabecalhos.Length; i++)
             {
                 detalhesSheet.Cell(1, i + 1).Value = cabecalhos[i];
@@ -85,12 +86,13 @@ namespace GerenciamentoHoras.Services
             foreach (var registro in registros)
             {
                 detalhesSheet.Cell(detalhesRow, 1).Value = registro.Id;
-                detalhesSheet.Cell(detalhesRow, 2).Value = registro.Matricula;
-                detalhesSheet.Cell(detalhesRow, 3).Value = registro.EXT;
-                detalhesSheet.Cell(detalhesRow, 4).Value = registro.Data.ToString("dd/MM/yyyy");
-                detalhesSheet.Cell(detalhesRow, 5).Value = registro.QuantidadeHoras;
-                detalhesSheet.Cell(detalhesRow, 6).Value = GetDisplayName(registro.Tipo);
-                detalhesSheet.Cell(detalhesRow, 7).Value = registro.DataCriacao.ToString("dd/MM/yyyy HH:mm");
+                detalhesSheet.Cell(detalhesRow, 2).Value = registro.Nome?.ToString() ?? "";
+                detalhesSheet.Cell(detalhesRow, 3).Value = registro.Matricula;
+                detalhesSheet.Cell(detalhesRow, 4).Value = registro.EXT;
+                detalhesSheet.Cell(detalhesRow, 5).Value = registro.Data.ToString("dd/MM/yyyy");
+                detalhesSheet.Cell(detalhesRow, 6).Value = registro.QuantidadeHoras;
+                detalhesSheet.Cell(detalhesRow, 7).Value = GetDisplayName(registro.Tipo);
+                detalhesSheet.Cell(detalhesRow, 8).Value = registro.DataCriacao.ToString("dd/MM/yyyy HH:mm");
                 detalhesRow++;
             }
 

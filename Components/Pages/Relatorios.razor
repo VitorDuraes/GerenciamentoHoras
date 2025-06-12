@@ -27,6 +27,10 @@
                             <label for="filtroMatricula" class="form-label">Matrícula</label>
                             <input id="filtroMatricula" class="form-control" @bind="filtroMatricula" placeholder="Digite a matrícula" />
                         </div>
+                         <div class="col-md-3">
+                            <label for="filtroNome" class="form-label">Nome Profissional</label>
+                            <input id="filtroNome" class="form-control" @bind="filtroNome" placeholder="Digite o nome" />
+                        </div>
                         <div class="col-md-3">
                             <label for="filtroProjeto" class="form-label">EXT</label>
                             <input id="filtroProjeto" class="form-control" @bind="filtroProjeto" placeholder="Digite o projeto" />
@@ -136,6 +140,7 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Matrícula</th>
+                                        <th>Nome Profissional</th>
                                         <th>EXT</th>
                                         <th>Data</th>
                                         <th>Horas</th>
@@ -148,6 +153,7 @@
                                     {
                                         <tr>
                                             <td>@registro.Matricula</td>
+                                            <td>@registro.Nome</td>
                                             <td>@registro.EXT</td>
                                             <td>@registro.Data.ToString("dd/MM/yyyy")</td>
                                             <td>@registro.QuantidadeHoras.ToString("F1")</td>
@@ -175,6 +181,7 @@
 
     // Filtros
     private string? filtroMatricula;
+    private string? filtroNome;
     private string? filtroProjeto;
     private string? filtroTipo;
     private DateTime? dataInicio;
@@ -188,6 +195,7 @@
     private async Task CarregarDados()
     {
         var matricula = string.IsNullOrWhiteSpace(filtroMatricula) ? null : filtroMatricula;
+        var nome = string.IsNullOrWhiteSpace(filtroNome) ? null : filtroNome;
         var projeto = string.IsNullOrWhiteSpace(filtroProjeto) ? null : filtroProjeto;
         TipoRegistro? tipo = null;
         
@@ -196,8 +204,8 @@
             tipo = (TipoRegistro)tipoInt;
         }
 
-        registrosFiltrados = await RegistroService.GetRelatorioAsync(matricula, projeto, tipo, dataInicio, dataFim);
-        totalHorasPorTipo = await RegistroService.GetTotalHorasPorTipoAsync(matricula, projeto, dataInicio, dataFim);
+        registrosFiltrados = await RegistroService.GetRelatorioAsync(matricula, nome, projeto, tipo, dataInicio, dataFim);
+        totalHorasPorTipo = await RegistroService.GetTotalHorasPorTipoAsync(matricula, nome,  projeto, dataInicio, dataFim);
     }
 
     private async Task AplicarFiltros()
@@ -209,6 +217,7 @@
     private async Task LimparFiltros()
     {
         filtroMatricula = null;
+        filtroNome = null;
         filtroProjeto = null;
         filtroTipo = null;
         dataInicio = null;
@@ -224,6 +233,7 @@
             var filtro = new
             {
                 Matricula = string.IsNullOrWhiteSpace(filtroMatricula) ? null : filtroMatricula,
+                Nome = string.IsNullOrWhiteSpace(filtroNome) ? null : filtroNome,
                 Projeto = string.IsNullOrWhiteSpace(filtroProjeto) ? null : filtroProjeto,
                 Tipo = string.IsNullOrWhiteSpace(filtroTipo) ? (int?)null : int.Parse(filtroTipo),
                 DataInicio = dataInicio,

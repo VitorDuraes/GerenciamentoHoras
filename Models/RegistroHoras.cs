@@ -10,6 +10,10 @@ namespace GerenciamentoHoras.Models
         [Display(Name = "Matrícula")]
         public string Matricula { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Nome é obrigatório")]
+        [Display(Name = "Nome")]
+        public string Nome { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "EXT é obrigatório")]
         [Display(Name = "EXT")]
         public string EXT { get; set; } = string.Empty;
