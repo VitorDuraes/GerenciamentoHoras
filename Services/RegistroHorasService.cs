@@ -36,9 +36,19 @@ namespace GerenciamentoHoras.Services
 
         public async Task<RegistroHoras> UpdateAsync(RegistroHoras registro)
         {
-            _context.Entry(registro).State = EntityState.Modified;
+            var existingRegistro = await _context.RegistrosHoras.FindAsync(registro.Id);
+
+            if (existingRegistro == null)
+                throw new Exception("Registro não encontrado.");
+
+            existingRegistro.Matricula = registro.Matricula;
+            existingRegistro.EXT = registro.EXT;
+            existingRegistro.Data = registro.Data;
+            existingRegistro.QuantidadeHoras = registro.QuantidadeHoras;
+            existingRegistro.Tipo = registro.Tipo;
+
             await _context.SaveChangesAsync();
-            return registro;
+            return existingRegistro;
         }
 
         public async Task<bool> DeleteAsync(int id)

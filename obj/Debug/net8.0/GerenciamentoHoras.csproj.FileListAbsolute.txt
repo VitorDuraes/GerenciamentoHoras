@@ -184,3 +184,4 @@ S:\GerenciamentoHoras_Projeto_Completo\GerenciamentoHoras\GerenciamentoHoras\bin
 S:\GerenciamentoHoras_Projeto_Completo\GerenciamentoHoras\GerenciamentoHoras\bin\Debug\net8.0\RBush.dll
 S:\GerenciamentoHoras_Projeto_Completo\GerenciamentoHoras\GerenciamentoHoras\bin\Debug\net8.0\SixLabors.Fonts.dll
 S:\GerenciamentoHoras_Projeto_Completo\GerenciamentoHoras\GerenciamentoHoras\bin\Debug\net8.0\System.IO.Packaging.dll
+S:\GerenciamentoHoras_Projeto_Completo\GerenciamentoHoras\GerenciamentoHoras\obj\Debug\net8.0\GerenciamentoHoras.sourcelink.json

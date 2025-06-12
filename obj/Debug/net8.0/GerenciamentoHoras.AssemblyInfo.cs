@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GerenciamentoHoras")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2e0d5d4fc2dba644f66786fbde44383565c614a9")]
 [assembly: System.Reflection.AssemblyProductAttribute("GerenciamentoHoras")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GerenciamentoHoras")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
