@@ -21,7 +21,7 @@ namespace GerenciamentoHoras.Models
 
         [Required(ErrorMessage = "Quantidade de horas é obrigatória")]
         [Display(Name = "Quantidade de Horas")]
-        [Range(0.1, 24, ErrorMessage = "A quantidade de horas deve estar entre 0.1 e 24")]
+        [Range(0.1, 168, ErrorMessage = "A quantidade de horas deve estar entre 0.1 e 168")]
         public decimal QuantidadeHoras { get; set; }
 
         [Required(ErrorMessage = "Tipo é obrigatório")]
